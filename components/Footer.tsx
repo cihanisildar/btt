@@ -7,7 +7,7 @@ export default function Footer() {
     {
       name: 'YouTube',
       icon: Youtube,
-      url: 'https://www.youtube.com/@yourchannel',
+      url: 'https://www.youtube.com/channel/UC-DXg79o_oeLbkXUlFJmYxw',
       color: 'hover:text-red-600'
     },
     {

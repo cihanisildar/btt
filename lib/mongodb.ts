@@ -14,6 +14,16 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
+// Helpful guard: if the developer forgot to replace the placeholder in env files
+// the DNS SRV lookup will fail with errors like: querySrv EBADNAME _mongodb._tcp.<cluster-url>
+if (MONGODB_URI.includes('<') || MONGODB_URI.includes('>') || MONGODB_URI.includes('cluster-url')) {
+  throw new Error(
+    'MONGODB_URI appears to still contain placeholder values.\n' +
+    'Please set a valid MongoDB Atlas connection string in your .env.local (remove angle brackets).\n' +
+    "Example: mongodb+srv://<username>:<password>@cluster0.abcd.mongodb.net/myDatabase?retryWrites=true&w=majority"
+  );
+}
+
 let cached = global.mongoose;
 
 if (!cached) {
