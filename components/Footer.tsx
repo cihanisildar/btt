@@ -19,7 +19,7 @@ export default function Footer() {
     {
       name: 'TikTok',
       icon: ExternalLink,
-      url: 'https://tiktok.com/@yourusername',
+      url: 'http://localhost:3000/',
       color: 'hover:text-black'
     },
     {
