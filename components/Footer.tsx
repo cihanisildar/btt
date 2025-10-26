@@ -5,7 +5,7 @@ import { Youtube, Instagram, Facebook, ExternalLink } from 'lucide-react';
 export default function Footer() {
   const socialLinks = [
     {
-      name: 'YouTubee',
+      name: 'YouTube',
       icon: Youtube,
       url: 'https://www.youtube.com/channel/UC-DXg79o_oeLbkXUlFJmYxw',
       color: 'hover:text-red-600'
