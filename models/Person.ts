@@ -40,8 +40,8 @@ const PersonSchema = new Schema<IPerson>({
   timestamps: true
 });
 
-// TC Kimlik No için index
-PersonSchema.index({ tcKimlikNo: 1 });
+// TC Kimlik No için index (unique: true zaten index oluşturuyor)
+// PersonSchema.index({ tcKimlikNo: 1 }); // Duplicate index - removed
 
 // Arama için text index
 PersonSchema.index({ ad: 'text', soyad: 'text' });

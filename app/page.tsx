@@ -8,6 +8,9 @@ import QRModal from '@/components/QRModal';
 import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 
+// Disable static generation for this page since it uses client-side features
+export const dynamic = 'force-dynamic';
+
 interface Person {
   _id: string;
   tcKimlikNo: string;
@@ -88,7 +91,7 @@ export default function Home() {
     setIsFormOpen(true);
   };
 
-  const handleSavePerson = async (personData: Person) => {
+  const handleSavePerson = async (personData: { _id?: string; tcKimlikNo: string; ad: string; soyad: string; kanGrubu: string }) => {
     try {
       const url = personData._id ? `/api/persons/${personData._id}` : '/api/persons';
       const method = personData._id ? 'PUT' : 'POST';

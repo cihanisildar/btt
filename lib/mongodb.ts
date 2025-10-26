@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+// Type declaration for global mongoose cache
+declare global {
+  var mongoose: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
+}
+
 // MongoDB Atlas bağlantı bilgileri - Bu bilgileri kendi MongoDB Atlas hesabınızdan alın
 // 1. MongoDB Atlas'a giriş yapın: https://cloud.mongodb.com/
 // 2. Yeni bir cluster oluşturun veya mevcut cluster'ı kullanın
@@ -14,20 +22,22 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-// Helpful guard: if the developer forgot to replace the placeholder in env files
-// the DNS SRV lookup will fail with errors like: querySrv EBADNAME _mongodb._tcp.<cluster-url>
-if (MONGODB_URI.includes('<') || MONGODB_URI.includes('>') || MONGODB_URI.includes('cluster-url')) {
-  throw new Error(
-    'MONGODB_URI appears to still contain placeholder values.\n' +
-    'Please set a valid MongoDB Atlas connection string in your .env.local (remove angle brackets).\n' +
-    "Example: mongodb+srv://<username>:<password>@cluster0.abcd.mongodb.net/myDatabase?retryWrites=true&w=majority"
-  );
-}
+// // Helpful guard: if the developer forgot to replace the placeholder in env files
+// // the DNS SRV lookup will fail with errors like: querySrv EBADNAME _mongodb._tcp.<cluster-url>
+// if (MONGODB_URI.includes('<') || MONGODB_URI.includes('>') || MONGODB_URI.includes('cluster-url')) {
+//   throw new Error(
+//     'MONGODB_URI appears to still contain placeholder values.\n' +
+//     'Please set a valid MongoDB Atlas connection string in your .env.local (remove angle brackets).\n' +
+//     "Example: mongodb+srv://<username>:<password>@cluster0.abcd.mongodb.net/myDatabase?retryWrites=true&w=majority"
+//   );
+// }
 
-let cached = global.mongoose;
+let cached: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
 
-if (!cached) {
+if (!global.mongoose) {
   cached = global.mongoose = { conn: null, promise: null };
+} else {
+  cached = global.mongoose as { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null };
 }
 
 async function connectDB() {
@@ -40,9 +50,7 @@ async function connectDB() {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI, opts);
   }
 
   try {
