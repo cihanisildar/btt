@@ -19,7 +19,7 @@ export default function Footer() {
     {
       name: 'TikTok',
       icon: ExternalLink,
-      url: 'http://localhost:3000/',
+      url: 'https://www.tiktok.com/@fatih.batuta',
       color: 'hover:text-black'
     },
     {
