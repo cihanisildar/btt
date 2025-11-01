@@ -31,49 +31,49 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer id="footer" className="bg-gray-900 text-white">
+      <div id="footer-container" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div id="footer-content" className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo ve Açıklama */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <div id="footer-about" className="space-y-4">
+            <div id="footer-logo" className="flex items-center space-x-3">
+              <div id="footer-logo-icon" className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
+                <svg id="footer-logo-svg" className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
               </div>
-              <div>
-                <h3 className="text-xl font-bold">Kan Grubu Yönetim</h3>
-                <p className="text-sm text-gray-400">Güvenli ve Modern</p>
+              <div id="footer-logo-text">
+                <h3 id="footer-logo-title" className="text-xl font-bold">Kan Grubu Yönetim</h3>
+                <p id="footer-logo-subtitle" className="text-sm text-gray-400">Güvenli ve Modern</p>
               </div>
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p id="footer-description" className="text-gray-400 text-sm leading-relaxed">
               Kişilerin kan grubu verilerini güvenli bir şekilde yönetin, 
               QR kod oluşturun ve modern teknolojilerle veri takibi yapın.
             </p>
           </div>
 
           {/* Hızlı Linkler */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Hızlı Linkler</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
+          <div id="footer-links" className="space-y-4">
+            <h4 id="footer-links-title" className="text-lg font-semibold">Hızlı Linkler</h4>
+            <ul id="footer-links-list" className="space-y-2">
+              <li id="footer-link-home">
+                <a id="footer-link-home-anchor" href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Ana Sayfa
                 </a>
               </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <li id="footer-link-add">
+                <a id="footer-link-add-anchor" href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Kişi Ekle
                 </a>
               </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <li id="footer-link-qr">
+                <a id="footer-link-qr-anchor" href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
                   QR Kod Oluştur
                 </a>
               </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
+              <li id="footer-link-help">
+                <a id="footer-link-help-anchor" href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
                   Yardım
                 </a>
               </li>
@@ -81,56 +81,57 @@ export default function Footer() {
           </div>
 
           {/* Bize Ulaşın */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Bize Ulaşın</h4>
-            <p className="text-gray-400 text-sm">
+          <div id="footer-contact" className="space-y-4">
+            <h4 id="footer-contact-title" className="text-lg font-semibold">Bize Ulaşın</h4>
+            <p id="footer-contact-description" className="text-gray-400 text-sm">
               Sosyal medya hesaplarımızdan bizi takip edin ve güncel gelişmelerden haberdar olun.
             </p>
             
             {/* Sosyal Medya Linkleri */}
-            <div className="flex flex-wrap gap-3">
+            <div id="footer-social-links" className="flex flex-wrap gap-3">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon;
                 return (
                   <a
                     key={social.name}
+                    id={`footer-social-link-${social.name.toLowerCase()}`}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center space-x-2 px-4 py-2 bg-gray-800 rounded-lg text-gray-300 transition-all duration-200 ${social.color} hover:bg-gray-700 group`}
                   >
-                    <IconComponent className="w-5 h-5" />
-                    <span className="text-sm font-medium">{social.name}</span>
+                    <IconComponent id={`footer-social-icon-${social.name.toLowerCase()}`} className="w-5 h-5" />
+                    <span id={`footer-social-text-${social.name.toLowerCase()}`} className="text-sm font-medium">{social.name}</span>
                   </a>
                 );
               })}
             </div>
 
             {/* İletişim Bilgileri */}
-            <div className="pt-4 border-t border-gray-800">
-              <div className="space-y-2 text-sm text-gray-400">
-                <p>📧 info@kan-grubu.com</p>
-                <p>📞 +90 (555) 123 45 67</p>
-                <p>📍 İstanbul, Türkiye</p>
+            <div id="footer-contact-info" className="pt-4 border-t border-gray-800">
+              <div id="footer-contact-info-list" className="space-y-2 text-sm text-gray-400">
+                <p id="footer-contact-email">📧 info@kan-grubu.com</p>
+                <p id="footer-contact-phone">📞 +90 (555) 123 45 67</p>
+                <p id="footer-contact-address">📍 İstanbul, Türkiye</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Alt Çizgi */}
-        <div className="mt-8 pt-8 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="text-sm text-gray-400">
+        <div id="footer-bottom" className="mt-8 pt-8 border-t border-gray-800">
+          <div id="footer-bottom-content" className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div id="footer-copyright" className="text-sm text-gray-400">
               © 2024 Kan Grubu Yönetim Sistemi. Tüm hakları saklıdır.
             </div>
-            <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            <div id="footer-bottom-links" className="flex space-x-6 text-sm">
+              <a id="footer-bottom-link-privacy" href="#" className="text-gray-400 hover:text-white transition-colors">
                 Gizlilik Politikası
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a id="footer-bottom-link-terms" href="#" className="text-gray-400 hover:text-white transition-colors">
                 Kullanım Şartları
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a id="footer-bottom-link-cookies" href="#" className="text-gray-400 hover:text-white transition-colors">
                 Çerez Politikası
               </a>
             </div>

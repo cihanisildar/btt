@@ -102,28 +102,29 @@ export default function PersonForm({ person, isOpen, onClose, onSave }: PersonFo
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-primary-600" />
+    <div id="person-form-overlay" className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div id="person-form-modal" className="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div id="person-form-header" className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div id="person-form-header-content" className="flex items-center space-x-3">
+            <div id="person-form-icon-container" className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+              <User id="person-form-icon" className="w-5 h-5 text-primary-600" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 id="person-form-title" className="text-xl font-semibold text-gray-900">
               {person ? 'Kişi Düzenle' : 'Yeni Kişi Ekle'}
             </h2>
           </div>
           <button
+            id="person-form-close-button"
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <X className="w-6 h-6" />
+            <X id="person-form-close-icon" className="w-6 h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div>
-            <label htmlFor="tcKimlikNo" className="block text-sm font-medium text-gray-700 mb-1">
+        <form id="person-form" onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div id="person-form-tc-container">
+            <label id="person-form-tc-label" htmlFor="tcKimlikNo" className="block text-sm font-medium text-gray-700 mb-1">
               TC Kimlik No *
             </label>
             <input
@@ -137,12 +138,12 @@ export default function PersonForm({ person, isOpen, onClose, onSave }: PersonFo
               placeholder="11 haneli TC kimlik numarası"
             />
             {errors.tcKimlikNo && (
-              <p className="text-red-500 text-sm mt-1">{errors.tcKimlikNo}</p>
+              <p id="person-form-tc-error" className="text-red-500 text-sm mt-1">{errors.tcKimlikNo}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="ad" className="block text-sm font-medium text-gray-700 mb-1">
+          <div id="person-form-ad-container">
+            <label id="person-form-ad-label" htmlFor="ad" className="block text-sm font-medium text-gray-700 mb-1">
               Ad *
             </label>
             <input
@@ -155,12 +156,12 @@ export default function PersonForm({ person, isOpen, onClose, onSave }: PersonFo
               placeholder="Ad"
             />
             {errors.ad && (
-              <p className="text-red-500 text-sm mt-1">{errors.ad}</p>
+              <p id="person-form-ad-error" className="text-red-500 text-sm mt-1">{errors.ad}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="soyad" className="block text-sm font-medium text-gray-700 mb-1">
+          <div id="person-form-soyad-container">
+            <label id="person-form-soyad-label" htmlFor="soyad" className="block text-sm font-medium text-gray-700 mb-1">
               Soyad *
             </label>
             <input
@@ -173,12 +174,12 @@ export default function PersonForm({ person, isOpen, onClose, onSave }: PersonFo
               placeholder="Soyad"
             />
             {errors.soyad && (
-              <p className="text-red-500 text-sm mt-1">{errors.soyad}</p>
+              <p id="person-form-soyad-error" className="text-red-500 text-sm mt-1">{errors.soyad}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="kanGrubu" className="block text-sm font-medium text-gray-700 mb-1">
+          <div id="person-form-kan-grubu-container">
+            <label id="person-form-kan-grubu-label" htmlFor="kanGrubu" className="block text-sm font-medium text-gray-700 mb-1">
               Kan Grubu *
             </label>
             <select
@@ -196,12 +197,13 @@ export default function PersonForm({ person, isOpen, onClose, onSave }: PersonFo
               ))}
             </select>
             {errors.kanGrubu && (
-              <p className="text-red-500 text-sm mt-1">{errors.kanGrubu}</p>
+              <p id="person-form-kan-grubu-error" className="text-red-500 text-sm mt-1">{errors.kanGrubu}</p>
             )}
           </div>
 
-          <div className="flex space-x-3 pt-4">
+          <div id="person-form-actions" className="flex space-x-3 pt-4">
             <button
+              id="person-form-cancel-button"
               type="button"
               onClick={onClose}
               className="btn-secondary flex-1"
@@ -209,12 +211,13 @@ export default function PersonForm({ person, isOpen, onClose, onSave }: PersonFo
               İptal
             </button>
             <button
+              id="person-form-submit-button"
               type="submit"
               disabled={isSubmitting}
               className="btn-primary flex-1 flex items-center justify-center space-x-2 disabled:opacity-50"
             >
-              <Save className="w-4 h-4" />
-              <span>{isSubmitting ? 'Kaydediliyor...' : 'Kaydet'}</span>
+              <Save id="person-form-submit-icon" className="w-4 h-4" />
+              <span id="person-form-submit-text">{isSubmitting ? 'Kaydediliyor...' : 'Kaydet'}</span>
             </button>
           </div>
         </form>
