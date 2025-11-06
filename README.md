@@ -1,152 +1,81 @@
-# Kan Grubu Yönetim Sistemi
+Be1yin F1rt1nas1
 
-Kişilerin kan grubu verilerini tutan, sorgulayabilen ve QR kod ile gösterebilen modern bir web uygulaması.
+Basit, Next.js + MongoDB tabanl1 bir "Beyin F1rt1nas1" uygulamas1. Kullan1c1lar konu (topic) olu1turup, her konu alt1nda fikir (idea) payla1abilir.
 
-## Özellikler
+Bu repo 159zerinde geli1tirme `beyin-firtinasi` branch'inde yap1lmaktad1r.
 
-- ✅ Kişi kayıt sistemi (TC Kimlik No, Ad, Soyad, Kan Grubu)
-- ✅ CRUD işlemleri (Ekleme, Listeleme, Güncelleme, Silme)
-- ✅ Gelişmiş arama ve filtreleme
-- ✅ QR kod oluşturma ve indirme
-- ✅ Modern ve responsive tasarım
-- ✅ MongoDB Atlas entegrasyonu
-- ✅ TypeScript desteği
+## Canl1 0nizleme
 
-## Teknolojiler
+Projeyi Vercel'e deploy etti1inizde buraya canl1 URL ekleyebilirsiniz. (Ben deploy i11lemini sizin Vercel hesab1n1za eri11meden yapamam — isterseniz ad1m ad1m y1nlendirme yapabilirim.)
 
-- **Frontend**: Next.js 14, React 18, TypeScript
-- **Styling**: Tailwind CSS
-- **Backend**: Next.js API Routes
-- **Database**: MongoDB Atlas
-- **QR Code**: qrcode library
-- **Icons**: Lucide React
+## Hzzl1 ba1sltma (lokal)
 
-## Kurulum
+1. Repo'yu klonlay1n ve `beyin-firtinasi` branch'ine ge11in:
 
-### 1. Projeyi klonlayın
-
-```bash
-git clone <repository-url>
-cd btt_qr
+```powershell
+git clone https://github.com/cihanisildar/btt.git
+cd btt
+git checkout beyin-firtinasi
 ```
 
-### 2. Bağımlılıkları yükleyin
+2. Ba1ml1l1klar1 y1kle1n:
 
-```bash
+```powershell
 npm install
 ```
 
-### 3. MongoDB Atlas Kurulumu
+3. `.env.local` olu1turun ve MongoDB ba1lant1 dizesini ekleyin:
 
-1. [MongoDB Atlas](https://cloud.mongodb.com/) hesabı oluşturun
-2. Yeni bir cluster oluşturun (ücretsiz tier kullanabilirsiniz)
-3. Database Access bölümünden yeni bir kullanıcı oluşturun
-4. Network Access bölümünden IP adresinizi ekleyin (0.0.0.0/0 tüm IP'ler için)
-5. Cluster'ınıza bağlanmak için connection string'i alın
-
-### 4. Ortam değişkenlerini ayarlayın
-
-`.env.local` dosyası oluşturun:
-
-```env
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/<database-name>?retryWrites=true&w=majority
-NEXTAUTH_URL=http://localhost:3000
+```
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.mongodb.net/beyinfirtinasi?retryWrites=true&w=majority
 ```
 
-**Önemli**: `<username>`, `<password>`, `<cluster-url>` ve `<database-name>` değerlerini kendi MongoDB Atlas bilgilerinizle değiştirin.
+Yerel Mongo ile 11111almak isterseniz Docker 111111r11le h1z1ca ba1latabilirsiniz:
 
-### 5. Uygulamayı çalıştırın
+```powershell
+docker run -d -p 27017:27017 --name mongodb mongo:6.0
+# sonra .env.local:
+MONGODB_URI=mongodb://localhost:27017/beyinfirtinasi
+```
 
-```bash
+4. Geli1tirme sunucusunu ba1lat1n:
+
+```powershell
 npm run dev
 ```
 
-Uygulama [http://localhost:3000](http://localhost:3000) adresinde çalışacaktır.
+Taray1c1da: http://localhost:3000 (ana sayfa) ve http://localhost:3000/topics (konular)
 
-## Kullanım
+## 0zellikler (eklenenler)
 
-### Kişi Ekleme
-1. Ana sayfada "Yeni Kişi" butonuna tıklayın
-2. TC Kimlik No, Ad, Soyad ve Kan Grubu bilgilerini girin
-3. "Kaydet" butonuna tıklayın
+- Konular olu1turma / listeleme
+- Her konu i1n fikir ekleme ve listeleme
+- Basit, mobile-first UI (Tailwind CSS)
 
-### Kişi Arama
-- Arama çubuğunu kullanarak ad, soyad veya TC kimlik no ile arama yapabilirsiniz
+## Vercel'e deploy
 
-### QR Kod Oluşturma
-1. Herhangi bir kişinin kartında "QR Kod" butonuna tıklayın
-2. QR kod otomatik olarak oluşturulacak ve gösterilecektir
-3. "QR Kodu İndir" butonu ile QR kodu bilgisayarınıza indirebilirsiniz
+1. Vercel hesab1n1za giri1 yap1n.
+2. Import Project 1 GitHub 1 `cihanisildar/btt` repo'sunu se1in.
+3. Production branch olarak `beyin-firtinasi` se1in (veya main isterseniz merge edin).
+4. Project settings 1 Environment Variables k1sm1na `MONGODB_URI` ekleyin.
+5. Deploy edin; deploy tamamland1111nda Vercel size bir canl1 URL verecek.
 
-### Kişi Düzenleme
-1. Kişi kartında "Düzenle" butonuna tıklayın
-2. Bilgileri güncelleyin
-3. "Kaydet" butonuna tıklayın
+## Geli1tirme notlar1
 
-### Kişi Silme
-1. Kişi kartında "Sil" butonuna tıklayın
-2. Onay verin
+- `lib/mongodb.ts` dosyas1 ba1lant1 dizesini `.env.local` i1inden okuyor. Placeholder de1erler b1rak1lm11sa uygulama ba1lang11111nda hata verecektir — l1tfen ger1ek URI girin.
+- UI iyile1tirmeleri: global header, ana sayfa hero, konular sayfas1 ve konu detay sayfas1 eklendi.
 
-## Proje Yapısı
+## Sonraki ad1mlar (0neriler)
 
-```
-btt_qr/
-├── app/
-│   ├── api/
-│   │   └── persons/
-│   │       ├── route.ts          # GET, POST endpoints
-│   │       └── [id]/
-│   │           ├── route.ts      # GET, PUT, DELETE endpoints
-│   │           └── qr/
-│   │               └── route.ts  # QR kod oluşturma
-│   ├── globals.css               # Global stiller
-│   ├── layout.tsx                # Root layout
-│   └── page.tsx                  # Ana sayfa
-├── components/
-│   ├── PersonCard.tsx            # Kişi kartı bileşeni
-│   ├── PersonForm.tsx            # Kişi formu bileşeni
-│   ├── QRModal.tsx               # QR kod modal'ı
-│   └── SearchBar.tsx             # Arama çubuğu
-├── lib/
-│   └── mongodb.ts                # MongoDB bağlantısı
-├── models/
-│   └── Person.ts                 # Person modeli
-└── package.json
-```
+- Kullan1c1 kimlik do1rulama (NextAuth) eklemek
+- Konulara be1eni, s1ralama, etiketleme eklemek
+- Ger1ek zamanl1 g1ncelllemeler i1n WebSocket / Pusher / Realtime DB
 
-## API Endpoints
+## Branchler
 
-### Kişiler
-- `GET /api/persons` - Tüm kişileri listele (sayfalama ve arama desteği)
-- `POST /api/persons` - Yeni kişi ekle
-- `GET /api/persons/[id]` - Tek kişi getir
-- `PUT /api/persons/[id]` - Kişi güncelle
-- `DELETE /api/persons/[id]` - Kişi sil
+- `main` — ana branch
+- `beyin-firtinasi` — geli1tirme branch'i (11u anki de1i1iklikler burada)
 
-### QR Kod
-- `GET /api/persons/[id]/qr` - Kişi için QR kod oluştur
+---
 
-## Veri Modeli
-
-```typescript
-interface Person {
-  _id: string;
-  tcKimlikNo: string;    // 11 haneli, benzersiz
-  ad: string;           // 2-50 karakter
-  soyad: string;        // 2-50 karakter
-  kanGrubu: string;     // A+, A-, B+, B-, AB+, AB-, 0+, 0-
-  createdAt: Date;
-  updatedAt: Date;
-}
-```
-
-## Güvenlik
-
-- TC Kimlik No benzersizlik kontrolü
-- Form validasyonu
-- MongoDB injection koruması
-- CORS ayarları
-
-## Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır.
+Haz1r olduğunuzda Vercel deploy ad1mlar1nda yard1mc1 olay1m veya isterseniz ben repo üzerinde ekstra iyile1tirmeler yap1p tekrar push edeyim.

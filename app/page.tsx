@@ -150,24 +150,29 @@ export default function Home() {
                 <Users className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Kan Grubu Yönetim Sistemi</h1>
-                <p className="text-sm text-gray-500">Kişi verilerini yönetin ve QR kod oluşturun</p>
+                <h1 className="text-xl font-bold text-gray-900">Beyin Fırtınası</h1>
+                <p className="text-sm text-gray-500">Konu başlatın, fikir ekleyin ve birlikte geliştirin</p>
               </div>
             </div>
-            <button
-              onClick={handleAddPerson}
-              className="btn-primary flex items-center space-x-2"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Yeni Kişi</span>
-            </button>
+            <div className="flex items-center space-x-2">
+              <a href="/topics" className="btn-secondary">Konulara Git</a>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Stats */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <section className="bg-gradient-to-r from-primary-50 to-white rounded-lg p-8 mb-8">
+          <div className="max-w-3xl">
+            <h2 className="text-2xl font-bold mb-2">Hoş geldiniz — Beyin Fırtınası</h2>
+            <p className="text-gray-600 mb-4">İstediğiniz konuda bir konu başlatın, diğer kullanıcıların fikirlerini toplayın ve fikirleri birlikte geliştirin. Hemen konulara göz atmak için aşağıdaki butona tıklayın.</p>
+            <a href="/topics" className="btn-primary">Konulara Git</a>
+          </div>
+        </section>
+
+        <section>
+  {/* Search and Stats */}
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex-1 max-w-md">
