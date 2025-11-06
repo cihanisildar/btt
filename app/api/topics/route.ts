@@ -7,19 +7,33 @@ export async function GET(request: NextRequest) {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '20');
-    const skip = (page - 1) * limit;
+    // cursor-based pagination: pass ?limit=20&cursor=<ISO-date>
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50);
+    const cursor = searchParams.get('cursor');
 
-    const topics = await Topic.find()
+    const query: any = {};
+    if (cursor) {
+      const cursorDate = new Date(cursor);
+      if (!isNaN(cursorDate.getTime())) {
+        // older than cursor (createdAt less than cursor gives older results)
+        query.createdAt = { $lt: cursorDate };
+      }
+    }
+
+    const docs = await Topic.find(query)
       .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
+      .limit(limit + 1)
       .lean();
 
-    const total = await Topic.countDocuments();
+    let nextCursor = null;
+    let topics = docs;
+    if (docs.length > limit) {
+      const next = docs[limit];
+      nextCursor = next.createdAt.toISOString();
+      topics = docs.slice(0, limit);
+    }
 
-    return NextResponse.json({ topics, pagination: { page, limit, total, pages: Math.ceil(total / limit) } });
+    return NextResponse.json({ topics, nextCursor });
   } catch (error) {
     console.error('Error fetching topics:', error);
     return NextResponse.json({ error: 'Konular getirilemedi' }, { status: 500 });

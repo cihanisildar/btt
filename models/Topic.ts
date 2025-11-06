@@ -9,7 +9,11 @@ export interface ITopic extends Document {
 
 const TopicSchema = new Schema<ITopic>({
   title: { type: String, required: true, trim: true, maxlength: 200 },
-  description: { type: String, trim: true, maxlength: 2000 }
+  description: { type: String, trim: true, maxlength: 2000 },
+  tags: [{ type: String, trim: true, maxlength: 50 }]
 }, { timestamps: true });
+
+// index tags for quick filtering
+TopicSchema.index({ tags: 1 });
 
 export default mongoose.models.Topic || mongoose.model<ITopic>('Topic', TopicSchema);

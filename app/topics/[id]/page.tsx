@@ -28,6 +28,18 @@ export default function TopicViewPage() {
     finally { setLoading(false); }
   };
 
+  const handleLike = async (ideaId: string) => {
+    try {
+      const res = await fetch(`/api/topics/${topicId}/ideas/${ideaId}/like`, { method: 'POST' });
+      if (res.ok) {
+        await fetchData();
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Beğenilemedi');
+      }
+    } catch (err) { console.error(err); alert('Hata oldu'); }
+  };
+
   useEffect(() => { fetchData(); }, [topicId]);
 
   return (
@@ -43,7 +55,13 @@ export default function TopicViewPage() {
               <div className="space-y-3">
                 {ideas.map(i => (
                   <div key={i._id} className="p-3 bg-white border rounded">
-                    <div className="text-sm text-gray-600 mb-1">{i.author || 'Anonim'} - {new Date(i.createdAt).toLocaleString()}</div>
+                    <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
+                      <div>{i.author || 'Anonim'} - {new Date(i.createdAt).toLocaleString()}</div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-sm text-gray-500">{i.likes || 0} ♥</div>
+                        <button onClick={() => handleLike(i._id)} className="text-primary-600 text-sm">Beğen</button>
+                      </div>
+                    </div>
                     <div>{i.content}</div>
                   </div>
                 ))}
