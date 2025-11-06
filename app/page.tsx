@@ -1,19 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Users, Search, Filter } from 'lucide-react';
-import PersonCard from '@/components/PersonCard';
-import PersonForm from '@/components/PersonForm';
-import QRModal from '@/components/QRModal';
+import { Plus, Lightbulb, Search, Filter } from 'lucide-react';
+import TopicCard from '@/components/TopicCard';
+import TopicForm from '@/components/TopicForm';
+import IdeaModal from '@/components/IdeaModal';
 import SearchBar from '@/components/SearchBar';
 import Footer from '@/components/Footer';
 
-interface Person {
+interface Topic {
   _id: string;
-  tcKimlikNo: string;
-  ad: string;
-  soyad: string;
-  kanGrubu: string;
+  title: string;
+  description: string;
+  author: string;
+  ideas: Idea[];
+  createdAt: string;
+}
+
+interface Idea {
+  _id: string;
+  content: string;
+  author: string;
   createdAt: string;
 }
 
@@ -25,7 +32,7 @@ interface Pagination {
 }
 
 export default function Home() {
-  const [persons, setPersons] = useState<Person[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
     limit: 10,
@@ -35,12 +42,12 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
-  const [editingPerson, setEditingPerson] = useState<Person | null>(null);
+  const [isIdeaModalOpen, setIsIdeaModalOpen] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [editingTopic, setEditingTopic] = useState<Topic | null>(null);
 
-  // Kişileri yükle
-  const fetchPersons = async (page = 1, search = '') => {
+  // Konuları yükle
+  const fetchTopics = async (page = 1, search = '') => {
     setIsLoading(true);
     try {
       const params = new URLSearchParams({
@@ -49,94 +56,98 @@ export default function Home() {
         ...(search && { search })
       });
 
-      const response = await fetch(`/api/persons?${params}`);
+      const response = await fetch(`/api/topics?${params}`);
       const data = await response.json();
 
       if (response.ok) {
-        setPersons(data.persons);
+        setTopics(data.topics);
         setPagination(data.pagination);
       } else {
-        console.error('Error fetching persons:', data.error);
+        console.error('Error fetching topics:', data.error);
       }
     } catch (error) {
-      console.error('Error fetching persons:', error);
+      console.error('Error fetching topics:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPersons();
+    fetchTopics();
   }, []);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    fetchPersons(1, query);
+    fetchTopics(1, query);
   };
 
   const handlePageChange = (newPage: number) => {
-    fetchPersons(newPage, searchQuery);
+    fetchTopics(newPage, searchQuery);
   };
 
-  const handleAddPerson = () => {
-    setEditingPerson(null);
+  const handleAddTopic = () => {
+    setEditingTopic(null);
     setIsFormOpen(true);
   };
 
-  const handleEditPerson = (person: Person) => {
-    setEditingPerson(person);
+  const handleEditTopic = (topic: Topic) => {
+    setEditingTopic(topic);
     setIsFormOpen(true);
   };
 
-  const handleSavePerson = async (personData: Person) => {
+  const handleSaveTopic = async (topicData: Omit<Topic, '_id' | 'ideas' | 'createdAt'>) => {
     try {
-      const url = personData._id ? `/api/persons/${personData._id}` : '/api/persons';
-      const method = personData._id ? 'PUT' : 'POST';
+      const url = editingTopic?._id ? `/api/topics/${editingTopic._id}` : '/api/topics';
+      const method = editingTopic?._id ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(personData),
+        body: JSON.stringify(topicData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setIsFormOpen(false);
-        setEditingPerson(null);
-        fetchPersons(pagination.page, searchQuery);
+        setEditingTopic(null);
+        fetchTopics(pagination.page, searchQuery);
       } else {
         alert(data.error || 'Bir hata oluştu');
       }
     } catch (error) {
-      console.error('Error saving person:', error);
-      alert('Kişi kaydedilemedi');
+      console.error('Error saving topic:', error);
+      alert('Konu kaydedilemedi');
     }
   };
 
-  const handleDeletePerson = async (id: string) => {
+  const handleDeleteTopic = async (id: string) => {
+    if (!confirm('Bu konuyu ve tüm fikirleri silmek istediğinizden emin misiniz?')) {
+      return;
+    }
+
     try {
-      const response = await fetch(`/api/persons/${id}`, {
+      const response = await fetch(`/api/topics/${id}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
-        fetchPersons(pagination.page, searchQuery);
+        fetchTopics(pagination.page, searchQuery);
       } else {
         const data = await response.json();
-        alert(data.error || 'Kişi silinemedi');
+        alert(data.error || 'Konu silinemedi');
       }
     } catch (error) {
-      console.error('Error deleting person:', error);
-      alert('Kişi silinemedi');
+      console.error('Error deleting topic:', error);
+      alert('Konu silinemedi');
     }
   };
 
-  const handleShowQR = (person: Person) => {
-    setSelectedPerson(person);
-    setIsQRModalOpen(true);
+  const handleShowIdeas = (topic: Topic) => {
+    setSelectedTopic(topic);
+    setIsIdeaModalOpen(true);
   };
 
   return (
@@ -146,45 +157,42 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Beyin Fırtınası</h1>
-                <p className="text-sm text-gray-500">Konu başlatın, fikir ekleyin ve birlikte geliştirin</p>
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/30">
+                  <Lightbulb className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold gradient-text">Beyin Fırtınası</h1>
+                  <p className="text-sm text-gray-600">Fikirlerinizi paylaşın, tartışın, geliştirin</p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <a href="/topics" className="btn-secondary">Konulara Git</a>
-            </div>
+            <button
+              onClick={handleAddTopic}
+              className="btn-primary flex items-center space-x-2"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Yeni Konu</span>
+            </button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <section className="bg-gradient-to-r from-primary-50 to-white rounded-lg p-8 mb-8">
-          <div className="max-w-3xl">
-            <h2 className="text-2xl font-bold mb-2">Hoş geldiniz — Beyin Fırtınası</h2>
-            <p className="text-gray-600 mb-4">İstediğiniz konuda bir konu başlatın, diğer kullanıcıların fikirlerini toplayın ve fikirleri birlikte geliştirin. Hemen konulara göz atmak için aşağıdaki butona tıklayın.</p>
-            <a href="/topics" className="btn-primary">Konulara Git</a>
-          </div>
-        </section>
-
-        <section>
-  {/* Search and Stats */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search and Stats */}
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex-1 max-w-md">
               <SearchBar
                 onSearch={handleSearch}
-                placeholder="Ad, soyad veya TC kimlik no ile ara..."
+                placeholder="Konu başlığı veya açıklama ile ara..."
               />
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
               <div className="flex items-center space-x-1">
-                <Users className="w-4 h-4" />
-                <span>Toplam: {pagination.total} kişi</span>
+                <Lightbulb className="w-4 h-4" />
+                <span>Toplam: {pagination.total} konu</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Filter className="w-4 h-4" />
@@ -199,42 +207,43 @@ export default function Home() {
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Kişiler yükleniyor...</p>
+              <p className="text-gray-600">Konular yükleniyor...</p>
             </div>
           </div>
-        ) : persons.length === 0 ? (
+        ) : topics.length === 0 ? (
           <div className="text-center py-12">
-            <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <Lightbulb className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {searchQuery ? 'Arama sonucu bulunamadı' : 'Henüz kişi eklenmemiş'}
+              {searchQuery ? 'Arama sonucu bulunamadı' : 'Henüz konu eklenmemiş'}
             </h3>
             <p className="text-gray-500 mb-6">
               {searchQuery 
                 ? 'Farklı arama terimleri deneyin' 
-                : 'İlk kişiyi eklemek için yukarıdaki butona tıklayın'
+                : 'İlk konuyu eklemek için yukarıdaki butona tıklayın'
               }
             </p>
             {!searchQuery && (
               <button
-                onClick={handleAddPerson}
+                onClick={handleAddTopic}
                 className="btn-primary"
               >
-                İlk Kişiyi Ekle
+                İlk Konuyu Ekle
               </button>
             )}
           </div>
         ) : (
           <>
-            {/* Person Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {persons.map((person) => (
-                <PersonCard
-                  key={person._id}
-                  person={person}
-                  onEdit={handleEditPerson}
-                  onDelete={handleDeletePerson}
-                  onShowQR={handleShowQR}
-                />
+            {/* Topic Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+              {topics.map((topic) => (
+                <div key={topic._id} className="group">
+                  <TopicCard
+                    topic={topic}
+                    onEdit={handleEditTopic}
+                    onDelete={handleDeleteTopic}
+                    onShowIdeas={handleShowIdeas}
+                  />
+                </div>
               ))}
             </div>
 
@@ -282,23 +291,24 @@ export default function Home() {
       </main>
 
       {/* Modals */}
-      <PersonForm
-        person={editingPerson}
+      <TopicForm
+        topic={editingTopic}
         isOpen={isFormOpen}
         onClose={() => {
           setIsFormOpen(false);
-          setEditingPerson(null);
+          setEditingTopic(null);
         }}
-        onSave={handleSavePerson}
+        onSave={handleSaveTopic}
       />
 
-      <QRModal
-        person={selectedPerson}
-        isOpen={isQRModalOpen}
+      <IdeaModal
+        topic={selectedTopic}
+        isOpen={isIdeaModalOpen}
         onClose={() => {
-          setIsQRModalOpen(false);
-          setSelectedPerson(null);
+          setIsIdeaModalOpen(false);
+          setSelectedTopic(null);
         }}
+        onUpdate={() => fetchTopics(pagination.page, searchQuery)}
       />
 
       {/* Footer */}
